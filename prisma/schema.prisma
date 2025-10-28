@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  CONTRIBUTOR
+  CUSTOMER
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum LicenseType {
+  STANDARD
+  EXTENDED
+  PREMIUM
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  avatar        String?
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  
+  // Supabase auth integration
+  supabaseId    String?   @unique
+  
+  // Relations
+  mediaAssets   MediaAsset[]
+  orders        Order[]
+  payouts       Payout[]
+  
+  @@map("users")
+}
+
+model MediaAsset {
+  id              String     @id @default(cuid())
+  title           String
+  description     String?
+  type            MediaType
+  tags            String[]
+  category        String?
+  
+  // Cloudinary URLs
+  cloudinaryId    String     @unique
+  originalUrl     String
+  thumbnailUrl    String
+  previewUrl      String
+  watermarkedUrl  String?
+  
+  // Metadata
+  width           Int?
+  height          Int?
+  duration        Int?        // For videos in seconds
+  fileSize        Int?        // In bytes
+  format          String?
+  
+  // Pricing
+  price           Decimal    @db.Decimal(10, 2)
+  licenseType     LicenseType @default(STANDARD)
+  
+  // Status
+  isActive        Boolean    @default(true)
+  isApproved      Boolean    @default(false)
+  
+  // Timestamps
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  
+  // Relations
+  userId          String
+  user            User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  orderItems      OrderItem[]
+  
+  @@map("media_assets")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  orderNumber     String      @unique
+  status          OrderStatus @default(PENDING)
+  
+  // Customer info
+  customerEmail   String
+  customerName    String?
+  
+  // Payment info
+  totalAmount     Decimal     @db.Decimal(10, 2)
+  currency        String      @default("USD")
+  
+  // Authorize.net integration
+  transactionId   String?
+  paymentMethod   String?
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  completedAt     DateTime?
+  
+  // Relations
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id])
+  items           OrderItem[]
+  
+  @@map("orders")
+}
+
+model OrderItem {
+  id              String      @id @default(cuid())
+  quantity        Int         @default(1)
+  unitPrice       Decimal     @db.Decimal(10, 2)
+  totalPrice      Decimal     @db.Decimal(10, 2)
+  
+  // Relations
+  orderId         String
+  order           Order       @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  mediaAssetId    String
+  mediaAsset      MediaAsset  @relation(fields: [mediaAssetId], references: [id])
+  
+  @@map("order_items")
+}
+
+model License {
+  id              String      @id @default(cuid())
+  name            String
+  description     String?
+  type            LicenseType
+  price           Decimal     @db.Decimal(10, 2)
+  usageRights     String[]    // Array of usage rights
+  restrictions    String[]    // Array of restrictions
+  
+  // Timestamps
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@map("licenses")
+}
+
+model Payout {
+  id              String        @id @default(cuid())
+  amount          Decimal       @db.Decimal(10, 2)
+  status          PayoutStatus  @default(PENDING)
+  
+  // Payment method
+  paymentMethod   String?
+  accountDetails  Json?          // Encrypted account details
+  
+  // Timestamps
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  processedAt     DateTime?
+  
+  // Relations
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("payouts")
+}
