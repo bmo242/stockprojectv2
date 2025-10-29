@@ -354,8 +354,8 @@ export default function AdminPage() {
                         )}
                         {user.role === 'CUSTOMER' && (
                           <div className="mt-1 text-sm text-gray-600">
-                            <p>{user.purchases} purchases</p>
-                            <p>{formatPrice(user.totalSpent)} spent</p>
+                            <p>{(user as any).purchases ?? 0} purchases</p>
+                            <p>{formatPrice((user as any).totalSpent ?? 0)} spent</p>
                           </div>
                         )}
                       </div>
