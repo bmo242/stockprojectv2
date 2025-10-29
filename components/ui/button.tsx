@@ -34,9 +34,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(({
   const classes = cn(baseClasses, variants[variant], sizes[size], className)
   
   if (asChild && React.isValidElement(children)) {
-    return React.cloneElement(children, {
-      className: cn(classes, children.props.className),
-      ...props,
+    // Cast the child to allow safe prop forwarding while satisfying TS.
+    // This cast occurs only after runtime validation via isValidElement.
+    const child = children as React.ReactElement & { props: any }
+
+    return React.cloneElement(child, {
+      className: cn(classes, child.props?.className),
+      ...(props as any),
     })
   }
   
