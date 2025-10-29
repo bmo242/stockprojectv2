@@ -68,12 +68,13 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    const orConditions: any[] = []
+    if (email) orConditions.push({ email })
+    if (supabaseId) orConditions.push({ supabaseId })
+
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          email ? { email } : undefined,
-          supabaseId ? { supabaseId } : undefined,
-        ].filter(Boolean),
+        OR: orConditions.length > 0 ? orConditions : undefined,
       },
     })
 
