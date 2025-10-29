@@ -24,6 +24,7 @@ const mockAsset = {
   watermarkedUrl: 'https://res.cloudinary.com/demo/image/upload/w_800/l_watermark/sample1.jpg',
   width: 1920,
   height: 1080,
+  duration: undefined as number | undefined,
   fileSize: 2048000,
   format: 'jpg',
   price: 25.00,
