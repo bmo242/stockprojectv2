@@ -33,13 +33,14 @@ export async function POST(request: NextRequest) {
         )
       }
 
-      const itemTotal = mediaAsset.price * item.quantity
+      const price = Number(mediaAsset.price)
+      const itemTotal = price * item.quantity
       totalAmount += itemTotal
 
       orderItems.push({
         mediaAssetId: item.mediaAssetId,
         quantity: item.quantity,
-        unitPrice: mediaAsset.price,
+        unitPrice: price,
         totalPrice: itemTotal,
       })
     }
