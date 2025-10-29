@@ -349,7 +349,7 @@ export default function AdminPage() {
                         {user.role === 'CONTRIBUTOR' && (
                           <div className="mt-1 text-sm text-gray-600">
                             <p>{user.uploads} uploads</p>
-                            <p>{formatPrice(user.earnings)} earned</p>
+                            <p>{formatPrice((user as any).earnings ?? 0)} earned</p>
                           </div>
                         )}
                         {user.role === 'CUSTOMER' && (
