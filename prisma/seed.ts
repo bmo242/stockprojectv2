@@ -68,7 +68,7 @@ async function main() {
       fileSize: 2048000,
       format: 'jpg',
       price: 25.00,
-      licenseType: 'STANDARD' as Prisma.LicenseType,
+      licenseType: 'STANDARD' as LicenseType,
       userId: contributor1.id,
     },
     {
@@ -87,7 +87,7 @@ async function main() {
       fileSize: 1800000,
       format: 'jpg',
       price: 35.00,
-      licenseType: 'EXTENDED' as Prisma.LicenseType,
+      licenseType: 'EXTENDED' as LicenseType,
       userId: contributor2.id,
     },
     {
@@ -107,7 +107,7 @@ async function main() {
       fileSize: 15728640,
       format: 'mp4',
       price: 75.00,
-      licenseType: 'PREMIUM' as Prisma.LicenseType,
+      licenseType: 'PREMIUM' as LicenseType,
       userId: contributor1.id,
     },
     {
@@ -126,7 +126,7 @@ async function main() {
       fileSize: 2200000,
       format: 'jpg',
       price: 30.00,
-      licenseType: 'STANDARD' as Prisma.LicenseType,
+      licenseType: 'STANDARD' as LicenseType,
       userId: contributor2.id,
     },
     {
@@ -145,7 +145,7 @@ async function main() {
       fileSize: 1500000,
       format: 'jpg',
       price: 20.00,
-      licenseType: 'STANDARD' as Prisma.LicenseType,
+      licenseType: 'STANDARD' as LicenseType,
       userId: contributor1.id,
     },
   ]
@@ -163,7 +163,7 @@ async function main() {
     {
       name: 'Standard License',
       description: 'Perfect for personal projects, blogs, and small business use.',
-      type: 'STANDARD' as Prisma.LicenseType,
+      type: 'STANDARD' as LicenseType,
       price: 25.00,
       usageRights: ['Personal use', 'Small business use', 'Web use', 'Social media'],
       restrictions: ['No resale', 'No large commercial use', 'No print advertising'],
@@ -171,7 +171,7 @@ async function main() {
     {
       name: 'Extended License',
       description: 'Ideal for larger commercial projects and marketing campaigns.',
-      type: 'EXTENDED' as Prisma.LicenseType,
+      type: 'EXTENDED' as LicenseType,
       price: 50.00,
       usageRights: ['All Standard features', 'Large commercial use', 'Print advertising', 'Unlimited prints'],
       restrictions: ['No resale', 'No white-label use'],
@@ -179,7 +179,7 @@ async function main() {
     {
       name: 'Premium License',
       description: 'Complete commercial rights for maximum flexibility.',
-      type: 'PREMIUM' as Prisma.LicenseType,
+      type: 'PREMIUM' as LicenseType,
       price: 75.00,
       usageRights: ['All Extended features', 'Resale rights', 'White-label use', 'Priority support'],
       restrictions: [],
@@ -199,7 +199,7 @@ async function main() {
       customerEmail: customer1.email,
       customerName: customer1.name,
       totalAmount: 60.00,
-      status: 'COMPLETED' as Prisma.OrderStatus,
+      status: 'COMPLETED' as OrderStatus,
       transactionId: 'txn-sample-001',
       paymentMethod: 'Credit Card',
       completedAt: new Date(),
@@ -227,7 +227,7 @@ async function main() {
   await prisma.payout.create({
     data: {
       amount: 33.00, // 60% of $55 (25 + 30)
-      status: 'COMPLETED' as Prisma.PayoutStatus,
+      status: 'COMPLETED' as PayoutStatus,
       paymentMethod: 'Bank Transfer',
       processedAt: new Date(),
       userId: contributor1.id,
