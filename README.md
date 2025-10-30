@@ -45,7 +45,7 @@ A comprehensive stock photo and video platform built with Next.js, TypeScript, T
    ```
 
 3. **Set up environment variables**
-   ```bash
+```bash
    cp .env.example .env.local
    ```
    
@@ -95,6 +95,36 @@ A comprehensive stock photo and video platform built with Next.js, TypeScript, T
    ```
 
    Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+### Production Environment Variables
+
+Set these in Vercel (Preview and Production):
+
+```
+NEXT_PUBLIC_SITE_URL=https://your-app.vercel.app
+
+# Database
+DATABASE_URL=postgresql://postgres:***@db.gbhemeesefffezdsybqa.supabase.co:5432/postgres
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
+
+# Cloudinary
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+
+# Authorize.net (Accept.js)
+AUTHORIZENET_API_LOGIN_ID=...
+AUTHORIZENET_TRANSACTION_KEY=...
+AUTHORIZENET_SIGNATURE_KEY=...
+
+# JWT
+JWT_SECRET=your_jwt_secret
+```
 
 ## Project Structure
 

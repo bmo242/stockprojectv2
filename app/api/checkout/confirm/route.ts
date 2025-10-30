@@ -2,23 +2,37 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
+const opaqueDataSchema = z.object({
+  dataDescriptor: z.string(),
+  dataValue: z.string(),
+}).optional()
+
 const confirmOrderSchema = z.object({
   orderId: z.string(),
-  transactionId: z.string(),
+  transactionId: z.string().optional(),
   paymentMethod: z.string().optional(),
+  opaqueData: opaqueDataSchema,
 })
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { orderId, transactionId, paymentMethod } = confirmOrderSchema.parse(body)
+    const { orderId, transactionId, paymentMethod, opaqueData } = confirmOrderSchema.parse(body)
+
+    // Simulate server-side verification of Accept.js opaque data
+    if (opaqueData) {
+      // Minimal validation: ensure the descriptor matches expected format
+      if (!opaqueData.dataDescriptor.startsWith('COMMON.ACCEPT')) {
+        return NextResponse.json({ error: 'Invalid payment token' }, { status: 400 })
+      }
+    }
 
     // Update order status
     const order = await prisma.order.update({
       where: { id: orderId },
       data: {
         status: 'COMPLETED',
-        transactionId,
+        transactionId: transactionId || 'SIMULATED-TXN-ID',
         paymentMethod,
         completedAt: new Date(),
       },

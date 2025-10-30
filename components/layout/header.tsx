@@ -68,7 +68,7 @@ export function Header() {
             </>
           ) : (
             <>
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="primary" size="sm" className="shadow-sm" asChild>
                 <Link href="/auth/signin">
                   <LogIn className="h-4 w-4 mr-2" />
                   Sign In
