@@ -22,6 +22,9 @@ export function Header() {
           <Link href="/browse" className="text-gray-600 hover:text-gray-900">
             Browse
           </Link>
+          <Link href="/discover" className="text-gray-900 font-medium">
+            Discover
+          </Link>
           <Link href="/categories" className="text-gray-600 hover:text-gray-900">
             Categories
           </Link>
