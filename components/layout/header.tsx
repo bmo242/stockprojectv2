@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Search, Upload, ShoppingCart, User, LogIn, LogOut } from 'lucide-react'
+import { Search, Upload, User, LogIn, LogOut } from 'lucide-react'
 import { useAuth } from '@/components/auth/auth-provider'
 
 export function Header() {
@@ -28,9 +28,6 @@ export function Header() {
           <Link href="/categories" className="text-gray-600 hover:text-gray-900">
             Categories
           </Link>
-          <Link href="/pricing" className="text-gray-600 hover:text-gray-900">
-            Pricing
-          </Link>
         </nav>
 
         {/* Search */}
@@ -54,9 +51,6 @@ export function Header() {
                   <Upload className="h-4 w-4 mr-2" />
                   Upload
                 </Link>
-              </Button>
-              <Button variant="ghost" size="sm">
-                <ShoppingCart className="h-4 w-4" />
               </Button>
               <Button variant="ghost" size="sm" asChild>
                 <Link href="/dashboard">

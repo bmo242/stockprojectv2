@@ -150,6 +150,61 @@ async function main() {
     },
   ]
 
+  // Additional demo images (Unsplash) ~25 items
+  const demoLibrary = [
+    { title: 'Mist over the Forest', url: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee' },
+    { title: 'Golden Gate at Dusk', url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29' },
+    { title: 'Desert Road', url: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470' },
+    { title: 'Snowy Peak', url: 'https://images.unsplash.com/photo-1501785888041-659ace7f3f7b' },
+    { title: 'Seaside Cliffs', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e' },
+    { title: 'City Reflections', url: 'https://images.unsplash.com/photo-1472214103451-9374bd1c798e' },
+    { title: 'Tropical Leaves', url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e' },
+    { title: 'Abstract Glass', url: 'https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d' },
+    { title: 'Minimal Workspace', url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085' },
+    { title: 'Sunset Over Lake', url: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429' },
+    { title: 'Coffee and Code', url: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085' },
+    { title: 'Blue Hour Skyline', url: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b' },
+    { title: 'Boardwalk', url: 'https://images.unsplash.com/photo-1500534318417-3a4d3d7bd1d6' },
+    { title: 'Waves Crashing', url: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e' },
+    { title: 'Monstera', url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e' },
+    { title: 'Pastel Building', url: 'https://images.unsplash.com/photo-1491553895911-0055eca6402d' },
+    { title: 'Neon Alley', url: 'https://images.unsplash.com/photo-1520977498770-5f3f84b0e8f3' },
+    { title: 'Foggy Pines', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e' },
+    { title: 'Mountain Trail', url: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e' },
+    { title: 'Street Crossing', url: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d' },
+    { title: 'Cyclist in Motion', url: 'https://images.unsplash.com/photo-1508609349937-5ec4ae374ebf' },
+    { title: 'Rustic Cabin', url: 'https://images.unsplash.com/photo-1475856034131-0f9d746d1f4b' },
+    { title: 'Lavender Fields', url: 'https://images.unsplash.com/photo-1469474968028-56623f02e42e' },
+    { title: 'Tea Time', url: 'https://images.unsplash.com/photo-1498654896293-37aacf113fd9' },
+    { title: 'Foggy Bridge', url: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29' },
+  ]
+
+  for (let i = 0; i < demoLibrary.length; i++) {
+    const d = demoLibrary[i]
+    const author = i % 2 === 0 ? contributor1 : contributor2
+    const base = `${d.url}?q=80&auto=format&fit=crop`
+    const thumb = `${d.url}?w=600&q=80&auto=format&fit=crop`
+    mediaAssets.push({
+      title: d.title,
+      description: null as any,
+      type: 'IMAGE' as MediaType,
+      tags: [],
+      category: 'Discover',
+      cloudinaryId: `unsplash-${i}-${Date.now()}`,
+      originalUrl: base,
+      thumbnailUrl: thumb,
+      previewUrl: base,
+      watermarkedUrl: null as any,
+      width: 1200,
+      height: 800,
+      fileSize: 0 as any,
+      format: 'jpg',
+      price: 20.0,
+      licenseType: 'STANDARD' as LicenseType,
+      userId: author.id,
+    })
+  }
+
   for (const assetData of mediaAssets) {
     await prisma.mediaAsset.upsert({
       where: { cloudinaryId: assetData.cloudinaryId },

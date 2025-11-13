@@ -16,6 +16,13 @@ const confirmOrderSchema = z.object({
 
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.ENABLE_PAYMENTS !== 'true') {
+      return NextResponse.json(
+        { error: 'Payments are currently disabled. Please contact us to license media.' },
+        { status: 503 },
+      )
+    }
+
     const body = await request.json()
     const { orderId, transactionId, paymentMethod, opaqueData } = confirmOrderSchema.parse(body)
 

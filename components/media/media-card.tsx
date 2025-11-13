@@ -1,5 +1,5 @@
 import { MediaAsset } from '@/types'
-import { formatPrice, formatFileSize, formatDuration } from '@/lib/utils'
+import { formatFileSize, formatDuration } from '@/lib/utils'
 import { Play, Download, Heart, Eye } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -67,35 +67,11 @@ export function MediaCard({ mediaAsset, showActions = true }: MediaCardProps) {
         <h3 className="font-medium text-gray-900 line-clamp-2">{mediaAsset.title}</h3>
         <p className="mt-1 text-sm text-gray-500 line-clamp-1">{mediaAsset.description}</p>
         
-        <div className="mt-2 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-medium text-gray-900">
-              {formatPrice(mediaAsset.price)}
-            </span>
-            {mediaAsset.fileSize && (
-              <span className="text-xs text-gray-500">
-                {formatFileSize(mediaAsset.fileSize)}
-              </span>
-            )}
-          </div>
-          <div className="flex items-center space-x-1">
-            {mediaAsset.tags.slice(0, 2).map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600"
-              >
-                {tag}
-              </span>
-            ))}
-            {mediaAsset.tags.length > 2 && (
-              <span className="text-xs text-gray-500">+{mediaAsset.tags.length - 2}</span>
-            )}
-          </div>
-        </div>
-        
         <div className="mt-2 flex items-center justify-between text-xs text-gray-500">
           <span>by {mediaAsset.user.name || mediaAsset.user.email}</span>
-          <span>{mediaAsset.licenseType}</span>
+          {mediaAsset.fileSize ? (
+            <span>{formatFileSize(mediaAsset.fileSize)}</span>
+          ) : null}
         </div>
       </div>
     </div>

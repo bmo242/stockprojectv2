@@ -10,6 +10,7 @@ type MediaCard = {
   title: string
   type: 'IMAGE' | 'VIDEO'
   thumbnailUrl: string
+  uploaderName?: string
 }
 
 type ApiPage = {
@@ -18,6 +19,7 @@ type ApiPage = {
     title: string
     type: 'IMAGE' | 'VIDEO'
     thumbnailUrl: string
+    user?: { name?: string | null; email?: string | null }
   }>
   pagination: { page: number; pages: number }
 }
@@ -46,6 +48,7 @@ export default function DiscoverPage() {
           title: a.title,
           type: a.type,
           thumbnailUrl: a.thumbnailUrl,
+          uploaderName: a?.user?.name || a?.user?.email || 'Contributor',
         }))
         setItems((prev) => [...prev, ...mapped])
         const totalPages = json?.pagination?.pages ?? page
@@ -89,6 +92,7 @@ export default function DiscoverPage() {
             <Link
               key={item.id}
               href={`/asset/${item.id}`}
+              prefetch={false}
               className="mb-4 block break-inside-avoid rounded-lg overflow-hidden border bg-white group"
             >
               <div className="relative w-full">
@@ -108,6 +112,9 @@ export default function DiscoverPage() {
               </div>
               <div className="px-3 py-2">
                 <p className="text-sm font-medium text-gray-900 line-clamp-1">{item.title}</p>
+                {item.uploaderName && (
+                  <p className="text-xs text-gray-500 line-clamp-1">by {item.uploaderName}</p>
+                )}
               </div>
             </Link>
           ))}

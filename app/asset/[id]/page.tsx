@@ -1,11 +1,10 @@
 'use client'
 
-import { useState } from 'react'
 import { Layout } from '@/components/layout/layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { formatPrice, formatFileSize, formatDuration } from '@/lib/utils'
-import { Download, Heart, Share, Plus, Minus, ShoppingCart, Play, Pause } from 'lucide-react'
+import { formatFileSize, formatDuration } from '@/lib/utils'
+import { Download, Share, Play } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -27,7 +26,7 @@ const mockAsset = {
   duration: undefined as number | undefined,
   fileSize: 2048000,
   format: 'jpg',
-  price: 25.00,
+  price: 25.0,
   licenseType: 'STANDARD',
   isActive: true,
   isApproved: true,
@@ -45,37 +44,7 @@ const mockAsset = {
 }
 
 export default function AssetDetailPage({ params }: { params: { id: string } }) {
-  const [quantity, setQuantity] = useState(1)
-  const [isPlaying, setIsPlaying] = useState(false)
-  const [selectedLicense, setSelectedLicense] = useState('STANDARD')
-
   const asset = mockAsset // In real app, fetch from API using params.id
-
-  const licenseOptions = [
-    {
-      type: 'STANDARD',
-      name: 'Standard License',
-      price: asset.price,
-      description: 'Perfect for personal projects, blogs, and small business use.',
-      features: ['Personal use', 'Small business use', 'Web use', 'Social media'],
-    },
-    {
-      type: 'EXTENDED',
-      name: 'Extended License',
-      price: asset.price * 2,
-      description: 'Ideal for larger commercial projects and marketing campaigns.',
-      features: ['All Standard features', 'Large commercial use', 'Print advertising', 'Unlimited prints'],
-    },
-    {
-      type: 'PREMIUM',
-      name: 'Premium License',
-      price: asset.price * 3,
-      description: 'Complete commercial rights for maximum flexibility.',
-      features: ['All Extended features', 'Resale rights', 'White-label use', 'Priority support'],
-    },
-  ]
-
-  const selectedLicenseOption = licenseOptions.find(opt => opt.type === selectedLicense)
 
   return (
     <Layout>
@@ -180,95 +149,52 @@ export default function AssetDetailPage({ params }: { params: { id: string } }) 
 
           {/* Sidebar */}
           <div>
-            {/* Purchase Card */}
             <Card className="sticky top-8">
               <CardHeader>
-                <CardTitle>Purchase Options</CardTitle>
+                <CardTitle>Download</CardTitle>
               </CardHeader>
               <CardContent>
-                {/* License Selection */}
-                <div className="space-y-3 mb-6">
-                  {licenseOptions.map((license) => (
-                    <div
-                      key={license.type}
-                      className={`border rounded-lg p-3 cursor-pointer transition-colors ${
-                        selectedLicense === license.type
-                          ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedLicense(license.type)}
+                <p className="text-sm text-gray-600 mb-4">
+                  Licensing and payments are currently paused. You can download the media directly for internal reviews or comps.
+                </p>
+
+                <div className="space-y-3">
+                  {(asset.watermarkedUrl || asset.previewUrl) && (
+                    <Button asChild variant="outline" className="w-full">
+                      <a
+                        href={asset.watermarkedUrl || asset.previewUrl}
+                        download
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Preview
+                      </a>
+                    </Button>
+                  )}
+                  <Button asChild className="w-full">
+                    <a
+                      href={asset.originalUrl}
+                      download
+                      target="_blank"
+                      rel="noreferrer"
                     >
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-medium text-gray-900">{license.name}</h4>
-                        <span className="font-bold text-blue-600">{formatPrice(license.price)}</span>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">{license.description}</p>
-                      <ul className="text-xs text-gray-500 space-y-1">
-                        {license.features.map((feature) => (
-                          <li key={feature}>• {feature}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  ))}
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Original {asset.type === 'VIDEO' ? 'Video' : 'Image'}
+                    </a>
+                  </Button>
                 </div>
 
-                {/* Quantity */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Quantity</label>
-                  <div className="flex items-center space-x-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </Button>
-                    <span className="w-12 text-center font-medium">{quantity}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setQuantity(quantity + 1)}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Total */}
-                <div className="border-t pt-4 mb-6">
-                  <div className="flex items-center justify-between mb-4">
-                    <span className="text-lg font-medium text-gray-900">Total</span>
-                    <span className="text-2xl font-bold text-blue-600">
-                      {formatPrice((selectedLicenseOption?.price || 0) * quantity)}
-                    </span>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Button className="w-full" size="lg">
-                      <ShoppingCart className="h-4 w-4 mr-2" />
-                      Add to Cart
-                    </Button>
-                    <Button variant="outline" className="w-full">
-                      <Heart className="h-4 w-4 mr-2" />
-                      Save to Favorites
-                    </Button>
-                    <Button variant="outline" className="w-full">
+                <div className="mt-6 border-t pt-4 text-xs text-gray-500">
+                  <p>
+                    Please credit <strong>{asset.user.name || asset.user.email}</strong> when using this media. For commercial licensing, contact us.
+                  </p>
+                  <div className="mt-3 flex items-center space-x-2">
+                    <Button variant="ghost" size="sm">
                       <Share className="h-4 w-4 mr-2" />
                       Share
                     </Button>
                   </div>
-                </div>
-
-                {/* Download Preview */}
-                <div className="border-t pt-4">
-                  <h4 className="font-medium text-gray-900 mb-2">Preview Download</h4>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Download a watermarked preview to test before purchase
-                  </p>
-                  <Button variant="outline" className="w-full">
-                    <Download className="h-4 w-4 mr-2" />
-                    Download Preview
-                  </Button>
                 </div>
               </CardContent>
             </Card>
